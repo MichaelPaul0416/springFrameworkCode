@@ -1,0 +1,46 @@
+Spring注解启用的主要步骤
+首先xml配置文件中，需要使用<context:annotation-config/>，代表开启注解;其次使用<context:component-scan/>配置需要扫描的包
+
+1.解析<context:annotation-config/>标签设置Comparator[AnnotationAwareOrderComparator]+AutowireCandidateResolver[ContextAnnotationAutowireCandidateResolver]
+
+2.设置下列五个PostProcessor
+org.springframework.context.annotation.internalConfigurationAnnotationProcessor[ConfigurationClassPostProcessor实现了接口BeanDefinitionRegistryPostProcessor]
+org.springframework.context.annotation.internalAutowiredAnnotationProcessor[AutowiredAnnotationBeanPostProcessor实现了接口BeanPostProcessor]
+org.springframework.context.annotation.internalCommonAnnotationProcessor[CommonAnnotationBeanPostProcessor实现了接口BeanPostProcessor]
+org.springframework.context.event.internalEventListenerProcessor[EventListenerMethodProcessor实现了BeanFactoryPostProcessor+ApplicationContextAware]
+org.springframework.context.event.internalEventListenerFactory[DefaultEventListenerFactory实现了EventListenerFactory]
+
+3.注册<context:annotation-config/>[CompositeComponentDefinition]
+
+
+上面3步是<context:annotation-config/>做的准备步骤，真正的将打上@Component注解的类注册为bean的事情，还是在解析<context:component-scan baskpackge="xx"/>标签时做的
+
+1.获取ClassPathBeanDefinitionScanner(根据use-default-filters=[true|false]注册AnnotationTypeFilter)
+	期间会根据配置注册BeanNameGenerator/resourcePattern/BeanDefinitionDefaults/ScopeMetaDataResolver/ScopeProxyMode/TypeFilter[包括include+exclude]等关键信息
+2.执行上面获取的scanner的doScan方法
+	2.1 扫描包下面的所有类，找出带有[@Component/@ManagedBean/@NamedBean]注解的java类，注册为Bean，这三类是通过AnnotationTypeFilter#match()方法进行匹配管理的[步骤1中被注册的Include类型的TypeFilter]
+	2.2 过滤上面扫描出的类，是否带有@Conditional注解，如果有的话，不作为一个bean被注册
+	2.3 上面的结果构建为ScannedGenericBeanDefinition,然后针对这个BeanDefinition做判断，是否是抽象的，如果是的话，那么是否带有@Lookup注解
+	2.4 对上述BeanDefinition进一步判断，看是否有@Lazy,@Primary,@DependsOn,@Role,@Description注解，有的话为BeanDefinition进一步设置属性
+	2.5 检验这个Bean是否要进行代理，如果要的话是jdk的动态代理还是cglib代理，默认是不设置代理
+	2.6 将上述的BeanDefinition进行注册
+3.将<context:component-scan/>构造为一个CompositeComponentDefinition.注册到Spring中
+
+bean被构造器初始化完成之后，经历的各种BeanPostProcessor装饰
+1.InstantiationAwareBeanPostProcessor#postProcessBeforeInstantiation
+2.MergedBeanDefinitionPostProcessor#postProcessMergedBeanDefinition
+    2.1 CommonAnnotationBeanPostProcessor#postProcessMergedBeanDefinition：寻找@PostConstructor,@PreDestroy注解修饰的Method
+        将他们封装为LifecycleElement,然后再经过check，最后作为确认的Method对象(Set)被注入对应的InitDestroyAnnotationBeanPostProcessor
+        最后将这些注入到对应Bean的BeanDefinition中
+    2.2 AutowiredAnnotationBeanPostProcessor#prostProcessMergedBeanDefintion：寻找@Autowired,@Value,@Inject修饰的非静态字段
+        其他事情和CommonAnnotationBeanPostProcessor中做的一样，最后都是被注入到对应的Bean的BeanDefinition中
+3.InstantiationAwareBeanPostProcessor#postProcessAfterInstantiation[Give any InstantiationAwareBeanPostProcessors the opportunity to modify the state of the bean before properties are set]
+    3.0 如果上述方法返回true的话，就是说这个bean需要进行后面的属性注入操作，false的话，这个bean不需要注入属性，代表此时初始化完成
+4.InstantiationAwareBeanPostProcessor#postProcessProperties：属性修改
+    4.1 CommonAnnotationBeanPostProcessor#postProcessProperties：针对2.1找到的Method进行注入
+    4.2 AutowiredAnnotationBeanPostProcessor#postProcessProperties：针对2.2找到的Field进行注入(期间可能会重新初始化尚未注册但是需要被依赖的Bean)
+5.BeanPostProcessor#postProcessBeforeInitialization|postProcessAfterInitialization
+    5.1 @PostConstruct 注解修饰的方法，最终就是在CommonAnnotationBeanPostProcessor#postProcessorBeforeInitialization中通过Method对象的反射执行
+
+@Conditional
+
