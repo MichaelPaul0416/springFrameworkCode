@@ -58,7 +58,7 @@ public abstract class AopNamespaceUtils {
 
 		BeanDefinition beanDefinition = AopConfigUtils.registerAutoProxyCreatorIfNecessary(
 				parserContext.getRegistry(), parserContext.extractSource(sourceElement));
-		useClassProxyingIfNecessary(parserContext.getRegistry(), sourceElement);
+		useClassProxyingIfNecessary(parserContext.getRegistry(), sourceElement);//设置proxyTargetClass和exposeProxy两个属性值
 		registerComponentIfNecessary(beanDefinition, parserContext);
 	}
 

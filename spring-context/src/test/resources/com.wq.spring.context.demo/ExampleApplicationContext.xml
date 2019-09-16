@@ -55,7 +55,7 @@
 		<aop:aspect>
 			<aop:declare-parents types-matching="com.wq.spring.context.demo.aop.ServiceImpl.ProtoServiceImpl"
 								 implement-interface="com.wq.spring.context.demo.aop.AdditionalService"
-								 default-impl="com.wq.spring.context.demo.aop.ServiceImpl.AdditionalServiceImpl"/>
+								 default-impl="com.wq.spring.context.demo.aop.ServiceImpl$AdditionalServiceImpl"/>
 		</aop:aspect>
 	</aop:config>
 
@@ -79,4 +79,6 @@
 	</bean>
 
 	<bean id="modifier" class="com.wq.spring.context.demo.bean.AliasModifier"/>
+
+	<bean class="com.wq.spring.context.demo.bean.InitBeanPostProcessor"/>
 </beans>

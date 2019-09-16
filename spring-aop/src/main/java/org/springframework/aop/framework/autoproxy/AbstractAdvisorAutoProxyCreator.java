@@ -121,7 +121,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	protected List<Advisor> findAdvisorsThatCanApply(
 			List<Advisor> candidateAdvisors, Class<?> beanClass, String beanName) {
 
-		ProxyCreationContext.setCurrentProxiedBeanName(beanName);
+		ProxyCreationContext.setCurrentProxiedBeanName(beanName);//待代理的beanName
 		try {
 			return AopUtils.findAdvisorsThatCanApply(candidateAdvisors, beanClass);
 		}

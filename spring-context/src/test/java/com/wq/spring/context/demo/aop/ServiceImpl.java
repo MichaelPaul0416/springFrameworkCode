@@ -67,19 +67,19 @@ public class ServiceImpl {
 		}
 	}
 
-	private static ApplicationContext applicationContext
-			= new ClassPathXmlApplicationContext("com.wq.spring.context.demo/ExampleApplicationContext.xml");
+//	private static ApplicationContext applicationContext
+//			= new ClassPathXmlApplicationContext("com.wq.spring.context.demo/ExampleApplicationContext.xml");
 
-	public static void main(String args[]) {
-		ProtoService protoService = (ProtoService) applicationContext.getBean("protoService");
-		protoService.service("proto query");
-
-		AdditionalService additionalService = (AdditionalService) applicationContext.getBean("protoService");
-		additionalService.additional("pro");
-
-		System.out.println("aop各种增强通知");
-		ServiceImpl service = (ServiceImpl) applicationContext.getBean("serviceBean");
-		System.out.println(service.getClass().equals(ServiceImpl.class));
-		System.out.println(service.display(new ArrayList<>()));
-	}
+//	public static void main(String args[]) {
+//		ProtoService protoService = (ProtoService) applicationContext.getBean("protoService");
+//		protoService.service("proto query");
+//
+//		AdditionalService additionalService = (AdditionalService) applicationContext.getBean("protoService");
+//		additionalService.additional("pro");
+//
+//		System.out.println("aop各种增强通知");
+//		ServiceImpl service = (ServiceImpl) applicationContext.getBean("serviceBean");
+//		System.out.println("---"+service.getClass().equals(ServiceImpl.class));
+//		System.out.println(service.display(new ArrayList<>()));
+//	}
 }

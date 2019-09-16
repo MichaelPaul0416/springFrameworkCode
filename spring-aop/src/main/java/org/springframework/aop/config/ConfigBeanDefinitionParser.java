@@ -127,6 +127,7 @@ class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	 * Configures the auto proxy creator needed to support the {@link BeanDefinition BeanDefinitions}
 	 * created by the '{@code <aop:config/>}' tag. Will force class proxying if the
 	 * '{@code proxy-target-class}' attribute is set to '{@code true}'.
+	 * 被{@code<aop:config/>}标签创建的bean也需要支持创建代理，同时如果{@code proxy-target-class}被设置为true，那么将强制走类代理
 	 * @see AopNamespaceUtils
 	 */
 	private void configureAutoProxyCreator(ParserContext parserContext, Element element) {
@@ -138,13 +139,14 @@ class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 	 * {@link org.springframework.aop.Advisor} and any resulting {@link org.springframework.aop.Pointcut}
 	 * with the supplied {@link BeanDefinitionRegistry}.
 	 */
-	private void parseAdvisor(Element advisorElement, ParserContext parserContext) {
+	private void parseAdvisor(Element advisorElement, ParserContext parserContext) {//DefaultBeanFactoryPointcutAdvisor
 		AbstractBeanDefinition advisorDef = createAdvisorBeanDefinition(advisorElement, parserContext);//advisor has a advice
 		String id = advisorElement.getAttribute(ID);
 
 		try {
 			this.parseState.push(new AdvisorEntry(id));
 			String advisorBeanName = id;
+			//注册这个Advisor作为一个bean
 			if (StringUtils.hasText(advisorBeanName)) {
 				parserContext.getRegistry().registerBeanDefinition(advisorBeanName, advisorDef);
 			}
@@ -177,7 +179,7 @@ class ConfigBeanDefinitionParser implements BeanDefinitionParser {
 		RootBeanDefinition advisorDefinition = new RootBeanDefinition(DefaultBeanFactoryPointcutAdvisor.class);
 		advisorDefinition.setSource(parserContext.extractSource(advisorElement));
 
-		String adviceRef = advisorElement.getAttribute(ADVICE_REF);
+		String adviceRef = advisorElement.getAttribute(ADVICE_REF);//advice-ref
 		if (!StringUtils.hasText(adviceRef)) {
 			parserContext.getReaderContext().error(
 					"'advice-ref' attribute contains empty value.", advisorElement, this.parseState.snapshot());

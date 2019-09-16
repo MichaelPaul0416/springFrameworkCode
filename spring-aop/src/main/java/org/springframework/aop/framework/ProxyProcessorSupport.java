@@ -104,7 +104,7 @@ public class ProxyProcessorSupport extends ProxyConfig implements Ordered, BeanC
 	protected void evaluateProxyInterfaces(Class<?> beanClass, ProxyFactory proxyFactory) {
 		Class<?>[] targetInterfaces = ClassUtils.getAllInterfacesForClass(beanClass, getProxyClassLoader());
 		boolean hasReasonableProxyInterface = false;
-		for (Class<?> ifc : targetInterfaces) {
+		for (Class<?> ifc : targetInterfaces) {//ifc没有实现bean生命周期的一些接口[InitializingBean|DisposableBean|Closeable|AutoCloseable|Aware]
 			if (!isConfigurationCallbackInterface(ifc) && !isInternalLanguageInterface(ifc) &&
 					ifc.getMethods().length > 0) {
 				hasReasonableProxyInterface = true;
@@ -114,7 +114,7 @@ public class ProxyProcessorSupport extends ProxyConfig implements Ordered, BeanC
 		if (hasReasonableProxyInterface) {
 			// Must allow for introductions; can't just set interfaces to the target's interfaces only.
 			for (Class<?> ifc : targetInterfaces) {
-				proxyFactory.addInterface(ifc);
+				proxyFactory.addInterface(ifc);//上述符合条件的ifc加入到需要代理的接口列表里面
 			}
 		}
 		else {

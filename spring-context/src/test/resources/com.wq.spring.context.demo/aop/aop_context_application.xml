@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+
+				http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+	<bean id="aspectCommon" class="com.wq.spring.context.demo.aop.ServiceImpl.ServiceAdvice"/>
+
+	<bean class="com.wq.spring.context.demo.bean.InitBeanPostProcessor"/>
+
+
+	<bean id="serviceBean" class="com.wq.spring.context.demo.aop.ServiceImpl"/>
+
+	<!--执行顺序是before > around > after-returning > after -->
+	<aop:config>
+		<aop:pointcut id="servicePoint" expression="execution(* com.wq.spring.context.demo.aop.ServiceImpl.* (..)) "/>
+		<aop:aspect id="allAspect" ref="aspectCommon">
+			<aop:before method="doBefore" pointcut-ref="servicePoint"/>
+			<aop:after method="doAfter" pointcut-ref="servicePoint"/>
+			<aop:after-returning method="afterReturning" pointcut-ref="servicePoint" returning="result"/>
+			<aop:around method="invoke" pointcut-ref="servicePoint"/>
+		</aop:aspect>
+	</aop:config>
+</beans>

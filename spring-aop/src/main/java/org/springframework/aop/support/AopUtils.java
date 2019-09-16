@@ -281,7 +281,7 @@ public abstract class AopUtils {
 	 */
 	public static boolean canApply(Advisor advisor, Class<?> targetClass, boolean hasIntroductions) {
 		if (advisor instanceof IntroductionAdvisor) {
-			return ((IntroductionAdvisor) advisor).getClassFilter().matches(targetClass);
+			return ((IntroductionAdvisor) advisor).getClassFilter().matches(targetClass);//交给ClassFilter去处理，有点类似责任链模式
 		}
 		else if (advisor instanceof PointcutAdvisor) {
 			PointcutAdvisor pca = (PointcutAdvisor) advisor;

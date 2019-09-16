@@ -485,6 +485,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		try {
 			// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);//让BeanPostProcessor去执行初始化Bean
+			/**
+			 * 在aop的初始化过程中，会执行AspectJAwareAdvisorAutoProxyCreator[本质上就是一个SmartInstantiationAwareBeanPostProcessor]
+			 * resolveBeforeInstantiation方法中会调用postProcessBeforeInstantiation
+			 * 而通常来说，这个方法会返回null，所以接下来就会走入doCreateBean方法中，执行BeanPostProcessor#postProcessAfterInitialization方法
+			 */
 			if (bean != null) {
 				return bean;//InstantiationAwareBeanPostProcessor#postProcessBeforeInstantiation已经完成了bean的初始化，所以此处直接返回
 			}

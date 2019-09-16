@@ -71,7 +71,7 @@ public class BeanFactoryAdvisorRetrievalHelper {
 			// Do not initialize FactoryBeans here: We need to leave all regular beans
 			// uninitialized to let the auto-proxy creator apply to them!
 			advisorNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
-					this.beanFactory, Advisor.class, true, false);
+					this.beanFactory, Advisor.class, true, false);//获取到BeanFactory中的所有的Advisor.class的实现类
 			this.cachedAdvisorBeanNames = advisorNames;
 		}
 		if (advisorNames.length == 0) {
@@ -88,7 +88,7 @@ public class BeanFactoryAdvisorRetrievalHelper {
 				}
 				else {
 					try {
-						advisors.add(this.beanFactory.getBean(name, Advisor.class));
+						advisors.add(this.beanFactory.getBean(name, Advisor.class));//获取到所有Advisor的bean
 					}
 					catch (BeanCreationException ex) {
 						Throwable rootCause = ex.getMostSpecificCause();

@@ -270,6 +270,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			return proxy;
 		}
 
+		// 一般来说，targetSource == null，所以return是null
 		return null;
 	}
 
@@ -349,6 +350,11 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);//获取这个bean对应的advisors、advices
 		if (specificInterceptors != DO_NOT_PROXY) {//object array not null
 			this.advisedBeans.put(cacheKey, Boolean.TRUE);
+			/**
+			 * 所以到这里就很清楚了，之所以要在BeanPostProcessor#postProcessAfterInitialization方法中处理
+			 * 是因为此时待代理的bean已经经过初始化了，填充好了基本的属性
+			 * 说白了就是可以直接拿来使用了，此时代理它，就不会出现问题
+			 */
 			Object proxy = createProxy(
 					bean.getClass(), beanName, specificInterceptors, new SingletonTargetSource(bean));
 			this.proxyTypes.put(cacheKey, proxy.getClass());
@@ -451,8 +457,8 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.copyFrom(this);
 
-		if (!proxyFactory.isProxyTargetClass()) {
-			if (shouldProxyTargetClass(beanClass, beanName)) {
+		if (!proxyFactory.isProxyTargetClass()) {//没有指定proxy-target-class这个属性
+			if (shouldProxyTargetClass(beanClass, beanName)) {//再次进行校验，有一次机会弥补
 				proxyFactory.setProxyTargetClass(true);
 			}
 			else {
@@ -511,7 +517,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 */
 	protected Advisor[] buildAdvisors(@Nullable String beanName, @Nullable Object[] specificInterceptors) {
 		// Handle prototypes correctly...
-		Advisor[] commonInterceptors = resolveInterceptorNames();//获取之前注册的beanName关联的advisor
+		Advisor[] commonInterceptors = resolveInterceptorNames();//一般为空数组
 
 		List<Object> allInterceptors = new ArrayList<>();
 		if (specificInterceptors != null) {

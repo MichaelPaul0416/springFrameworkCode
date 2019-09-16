@@ -42,6 +42,7 @@ public abstract class AutoProxyUtils {
 	 * to its target class (even if AOP advices get applied through auto-proxying).
 	 * @see #shouldProxyTargetClass
 	 */
+	//org.springframework.aop.framework.autoproxy.AutoProxyUtils.preserveTargetClass
 	public static final String PRESERVE_TARGET_CLASS_ATTRIBUTE =
 			Conventions.getQualifiedAttributeName(AutoProxyUtils.class, "preserveTargetClass");
 
