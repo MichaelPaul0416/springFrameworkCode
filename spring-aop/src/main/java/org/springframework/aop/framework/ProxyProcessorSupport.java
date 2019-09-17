@@ -111,7 +111,7 @@ public class ProxyProcessorSupport extends ProxyConfig implements Ordered, BeanC
 				break;
 			}
 		}
-		if (hasReasonableProxyInterface) {
+		if (hasReasonableProxyInterface) {//如果一个bean没有实现关于bean生命周期的接口，只有自己的一些方法，那么默认情况下，是走接口代理
 			// Must allow for introductions; can't just set interfaces to the target's interfaces only.
 			for (Class<?> ifc : targetInterfaces) {
 				proxyFactory.addInterface(ifc);//上述符合条件的ifc加入到需要代理的接口列表里面

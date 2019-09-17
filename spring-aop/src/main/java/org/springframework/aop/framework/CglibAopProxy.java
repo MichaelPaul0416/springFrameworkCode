@@ -197,6 +197,9 @@ class CglibAopProxy implements AopProxy, Serializable {
 				types[x] = callbacks[x].getClass();
 			}
 			// fixedInterceptorMap only populated at this point, after getCallbacks call above
+			/**
+			 * CallBackFilter#accept方法返回的整数，代表就是要调用CallBack[]数组的第几个CallBack
+			 */
 			enhancer.setCallbackFilter(new ProxyCallbackFilter(
 					this.advised.getConfigurationOnlyCopy(), this.fixedInterceptorMap, this.fixedInterceptorOffset));//decide which argument route to strategy
 			enhancer.setCallbackTypes(types);

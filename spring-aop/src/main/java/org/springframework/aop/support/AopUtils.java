@@ -296,8 +296,8 @@ public abstract class AopUtils {
 	/**
 	 * Determine the sublist of the {@code candidateAdvisors} list
 	 * that is applicable to the given class.
-	 * @param candidateAdvisors the Advisors to evaluate
-	 * @param clazz the target class
+	 * @param candidateAdvisors the Advisors to evaluate -- spring 中Advisor的所有实现，创建中的bean除外
+	 * @param clazz the target class -- beanClass
 	 * @return sublist of Advisors that can apply to an object of the given class
 	 * (may be the incoming List as-is)
 	 */

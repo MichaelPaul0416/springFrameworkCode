@@ -347,6 +347,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		}
 
 		// Create proxy if we have advice.
+		// List<Advisor>
 		Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);//获取这个bean对应的advisors、advices
 		if (specificInterceptors != DO_NOT_PROXY) {//object array not null
 			this.advisedBeans.put(cacheKey, Boolean.TRUE);

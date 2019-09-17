@@ -24,7 +24,11 @@ public class AopContextApplicationTest {
 
 	@Test
 	public void commonAop(){
-//		ServiceImpl service = (ServiceImpl) applicationContext.getBean("serviceBean");
-//		System.out.println(service.getClass().equals(ServiceImpl.class));
+		ServiceImpl service = (ServiceImpl) applicationContext.getBean("serviceBean");
+		System.out.println(service.getClass().equals(ServiceImpl.class));
+		System.out.println(service.getClass().getName());
+//		System.out.println(service);
+		System.out.println(service.display("hello"));
+		service.withoutAop("aop");
 	}
 }

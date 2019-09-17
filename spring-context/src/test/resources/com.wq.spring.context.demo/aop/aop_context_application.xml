@@ -14,11 +14,11 @@
 
 	<!--执行顺序是before > around > after-returning > after -->
 	<aop:config>
-		<aop:pointcut id="servicePoint" expression="execution(* com.wq.spring.context.demo.aop.ServiceImpl.* (..)) "/>
+		<aop:pointcut id="servicePoint" expression="execution(* com.wq.spring.context.demo.aop.ServiceImpl.display(..)) "/>
 		<aop:aspect id="allAspect" ref="aspectCommon">
-			<aop:before method="doBefore" pointcut-ref="servicePoint"/>
-			<aop:after method="doAfter" pointcut-ref="servicePoint"/>
-			<aop:after-returning method="afterReturning" pointcut-ref="servicePoint" returning="result"/>
+			<!--<aop:before method="doBefore" pointcut-ref="servicePoint"/>-->
+			<!--<aop:after method="doAfter" pointcut-ref="servicePoint"/>-->
+			<!--<aop:after-returning method="afterReturning" pointcut-ref="servicePoint" returning="result"/>-->
 			<aop:around method="invoke" pointcut-ref="servicePoint"/>
 		</aop:aspect>
 	</aop:config>

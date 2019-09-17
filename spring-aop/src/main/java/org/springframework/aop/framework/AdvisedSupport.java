@@ -480,6 +480,11 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 		MethodCacheKey cacheKey = new MethodCacheKey(method);
 		List<Object> cached = this.methodCache.get(cacheKey);
 		if (cached == null) {
+			/**
+			 * 下面这行代码是aop根据execution表达式过滤出符合条件的方法的核心所在
+			 * 根据之前配置组装好的所有{@code List<Advisor>},然后遍历他们，使用每一个PointCut关联的ClassFilter进行匹配当前方法method
+			 * 符合的advisor留下，组装成返回值赋值给cached
+			 */
 			cached = this.advisorChainFactory.getInterceptorsAndDynamicInterceptionAdvice(
 					this, method, targetClass);
 			this.methodCache.put(cacheKey, cached);

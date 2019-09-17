@@ -54,9 +54,10 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 		// This is somewhat tricky... We have to process introductions first,
 		// but we need to preserve order in the ultimate list.
 		AdvisorAdapterRegistry registry = GlobalAdvisorAdapterRegistry.getInstance();
-		Advisor[] advisors = config.getAdvisors();
+		// 同时，一般来说，都会内置一个默认的Advisor-->DefaultPointCutAdvisor
+		Advisor[] advisors = config.getAdvisors();//获取所有符合条件的Advisor
 		List<Object> interceptorList = new ArrayList<>(advisors.length);
-		Class<?> actualClass = (targetClass != null ? targetClass : method.getDeclaringClass());
+		Class<?> actualClass = (targetClass != null ? targetClass : method.getDeclaringClass());//获取方法所属的Class对象
 		Boolean hasIntroductions = null;
 
 		for (Advisor advisor : advisors) {
@@ -66,6 +67,11 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 				if (config.isPreFiltered() || pointcutAdvisor.getPointcut().getClassFilter().matches(actualClass)) {
 					MethodMatcher mm = pointcutAdvisor.getPointcut().getMethodMatcher();
 					boolean match;
+					/**
+					 * MethodMatcher#matches方法就是根据pointcut中的execution表达式，判断当前Class的Method是否符合表达式的规则
+					 * 如果符合的话，返回true，不符合返回false
+					 * 只有返回true的情况下，当前Advisor才会加入到拦截当前method的增强列表中，这就是aop的核心所在
+					 */
 					if (mm instanceof IntroductionAwareMethodMatcher) {
 						if (hasIntroductions == null) {
 							hasIntroductions = hasMatchingIntroductions(advisors, actualClass);
@@ -75,6 +81,7 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 					else {
 						match = mm.matches(method, actualClass);
 					}
+					// match==true，才会将当前Advisor作为可以起到拦截作用的增强，加入到拦截当前method的advisor列表中
 					if (match) {
 						MethodInterceptor[] interceptors = registry.getInterceptors(advisor);
 						if (mm.isRuntime()) {

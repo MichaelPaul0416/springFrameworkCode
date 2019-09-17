@@ -24,6 +24,15 @@ public class ServiceImpl {
 		return map;
 	}
 
+	public void withoutAop(String param){
+		System.out.println("input param:" + param);
+	}
+
+	@Override
+	public String toString() {
+		return "ServiceImpl{Hello world}";
+	}
+
 	public static class ProtoServiceImpl implements ProtoService {
 
 		@Override
@@ -56,9 +65,9 @@ public class ServiceImpl {
 
 
 		public Object invoke(ProceedingJoinPoint joinPoint) throws Throwable {
-			System.out.println("around before");
+			System.out.println("Name[" + joinPoint.getSignature().getName() + "] around before");
 			Object object = joinPoint.proceed();
-			System.out.println("around after");
+			System.out.println("Name[" + joinPoint.getSignature().getName() + "] around after");
 			return object;
 		}
 

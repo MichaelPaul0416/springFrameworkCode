@@ -123,7 +123,8 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 
 		ProxyCreationContext.setCurrentProxiedBeanName(beanName);//待代理的beanName
 		try {
-			return AopUtils.findAdvisorsThatCanApply(candidateAdvisors, beanClass);
+			//主要就是对candidateAdvisors中的所有advisor使用ClassFilter进行过滤，筛选出符合条件的Advisor
+ 			return AopUtils.findAdvisorsThatCanApply(candidateAdvisors, beanClass);
 		}
 		finally {
 			ProxyCreationContext.setCurrentProxiedBeanName(null);
@@ -162,6 +163,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	 * required by some of the later advisors.
 	 * @param candidateAdvisors the Advisors that have already been identified as
 	 * applying to a given bean
+	 * 留下一个可扩展的接口，子类实现的时候，可以在这个方法中注册一些额外的Advisors
 	 */
 	protected void extendAdvisors(List<Advisor> candidateAdvisors) {
 	}

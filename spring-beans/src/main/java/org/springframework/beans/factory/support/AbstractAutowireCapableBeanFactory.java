@@ -1751,6 +1751,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					beanName, "Invocation of init method failed", ex);
 		}
 		if (mbd == null || !mbd.isSynthetic()) {
+			/**
+			 * 下面方法的作用
+			 * aop通过createProxy生成的代理对象，通过BeanPostProcessor#postProcessAfterInitialization方法返回
+			 * 最终由wrappedBean方法接收，然后将这个bean注册到spring中
+			 * 所以在这里就实现了代理对象生成之后替换spring中原先生成的bean对象
+			 */
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);//aop的AspectJAwareAdvisorAutoProxyCreator执行
 		}
 
