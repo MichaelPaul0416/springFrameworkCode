@@ -121,7 +121,7 @@ public class DemoApplicationContextTest {
 
 		@Override
 		public void destroy() throws Exception {
-			this.destroy = true;
+			destroy = true;
 		}
 	}
 
@@ -132,11 +132,11 @@ public class DemoApplicationContextTest {
 		@Override
 		public void destroy() throws Exception {
 			System.out.println("destroy bean and set argument destroy to true");
-			this.destroy = true;
+			destroy = true;
 		}
 
 		public DemoBean2(){
-			this.prepare = true;
+			prepare = true;
 		}
 	}
 

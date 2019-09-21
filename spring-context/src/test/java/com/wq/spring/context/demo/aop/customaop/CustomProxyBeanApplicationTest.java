@@ -37,7 +37,7 @@ public class CustomProxyBeanApplicationTest {
 	public void test(){
 		ProxyFacade proxyBean = (ProxyFacade) applicationContext.getBean("proxyBean");
 		try {
-			proxyBean.invoke(null);
+			proxyBean.invoke(new Object());
 		} catch (Throwable throwable) {
 			throwable.printStackTrace();
 		}
