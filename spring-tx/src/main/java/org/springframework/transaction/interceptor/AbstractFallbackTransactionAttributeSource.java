@@ -95,7 +95,7 @@ public abstract class AbstractFallbackTransactionAttributeSource implements Tran
 		}
 
 		// First, see if we have a cached value.
-		Object cacheKey = getCacheKey(method, targetClass);
+		Object cacheKey = getCacheKey(method, targetClass);//检查目标方法是否被代理拦截过
 		TransactionAttribute cached = this.attributeCache.get(cacheKey);
 		if (cached != null) {
 			// Value will either be canonical value indicating there is no transaction attribute,
@@ -109,7 +109,7 @@ public abstract class AbstractFallbackTransactionAttributeSource implements Tran
 		}
 		else {
 			// We need to work it out.
-			TransactionAttribute txAttr = computeTransactionAttribute(method, targetClass);
+			TransactionAttribute txAttr = computeTransactionAttribute(method, targetClass);//计算得到需要的Spring事务传播属性以及数据库隔离级别
 			// Put it in the cache.
 			if (txAttr == null) {
 				this.attributeCache.put(cacheKey, NULL_TRANSACTION_ATTRIBUTE);
@@ -137,7 +137,7 @@ public abstract class AbstractFallbackTransactionAttributeSource implements Tran
 	 * @return the cache key (never {@code null})
 	 */
 	protected Object getCacheKey(Method method, @Nullable Class<?> targetClass) {
-		return new MethodClassKey(method, targetClass);
+		return new MethodClassKey(method, targetClass);//同一个class的同一个方法
 	}
 
 	/**
@@ -150,26 +150,27 @@ public abstract class AbstractFallbackTransactionAttributeSource implements Tran
 	@Nullable
 	protected TransactionAttribute computeTransactionAttribute(Method method, @Nullable Class<?> targetClass) {
 		// Don't allow no-public methods as required.
-		if (allowPublicMethodsOnly() && !Modifier.isPublic(method.getModifiers())) {
+		if (allowPublicMethodsOnly() && !Modifier.isPublic(method.getModifiers())) {//不允许为非public的方法开启事务
 			return null;
 		}
 
 		// The method may be on an interface, but we need attributes from the target class.
 		// If the target class is null, the method will be unchanged.
-		Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);
+		Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);//处理接口，泛型，继承关系等，找到合适的Method
 
 		// First try is the method in the target class.
-		TransactionAttribute txAttr = findTransactionAttribute(specificMethod);
+		TransactionAttribute txAttr = findTransactionAttribute(specificMethod);//检查当前方法是否使用了org.springframework.transaction.annotation.Transactional/javax.transaction.Transactional.class注解标记
 		if (txAttr != null) {
 			return txAttr;
 		}
 
 		// Second try is the transaction attribute on the target class.
-		txAttr = findTransactionAttribute(specificMethod.getDeclaringClass());
+		txAttr = findTransactionAttribute(specificMethod.getDeclaringClass());// 如果当前方法没有使用上述两个Transactional注解标记，那么检查方法所属的类，是否有上述的两个注解进行标记
 		if (txAttr != null && ClassUtils.isUserLevelMethod(method)) {
 			return txAttr;
 		}
 
+		// 如果specificMethod还是找不到的话，那么就用入参里面的Method对象，重新进行一轮筛选操作
 		if (specificMethod != method) {
 			// Fallback is to look at the original method.
 			txAttr = findTransactionAttribute(method);

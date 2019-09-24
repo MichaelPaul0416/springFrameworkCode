@@ -45,6 +45,7 @@ public class TxNamespaceHandler extends NamespaceHandlerSupport {
 
 
 	static String getTransactionManagerName(Element element) {
+		// 注册指定的事务管理器，如果没有指定的话，使用默认的事务管理器
 		return (element.hasAttribute(TRANSACTION_MANAGER_ATTRIBUTE) ?
 				element.getAttribute(TRANSACTION_MANAGER_ATTRIBUTE) : DEFAULT_TRANSACTION_MANAGER_BEAN_NAME);
 	}

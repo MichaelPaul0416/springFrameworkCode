@@ -203,7 +203,7 @@ public abstract class ReflectionUtils {
 		Class<?> searchType = clazz;
 		while (searchType != null) {
 			Method[] methods = (searchType.isInterface() ? searchType.getMethods() : getDeclaredMethods(searchType));
-			for (Method method : methods) {
+			for (Method method : methods) {//这个methods是接口和类所有的method
 				if (name.equals(method.getName()) &&
 						(paramTypes == null || Arrays.equals(paramTypes, method.getParameterTypes()))) {
 					return method;
@@ -659,9 +659,9 @@ public abstract class ReflectionUtils {
 		Method[] result = declaredMethodsCache.get(clazz);
 		if (result == null) {
 			try {
-				Method[] declaredMethods = clazz.getDeclaredMethods();
-				List<Method> defaultMethods = findConcreteMethodsOnInterfaces(clazz);
-				if (defaultMethods != null) {
+				Method[] declaredMethods = clazz.getDeclaredMethods();//获取当前class的所有方法
+				List<Method> defaultMethods = findConcreteMethodsOnInterfaces(clazz);//获取接口定义中的所有非抽象方法
+				if (defaultMethods != null) {//merge All methods which is concrect
 					result = new Method[declaredMethods.length + defaultMethods.size()];
 					System.arraycopy(declaredMethods, 0, result, 0, declaredMethods.length);
 					int index = declaredMethods.length;

@@ -121,7 +121,7 @@ public abstract class AbstractBeanFactoryPointcutAdvisor extends AbstractPointcu
 			// No singleton guarantees from the factory -> let's lock locally but
 			// reuse the factory's singleton lock, just in case a lazy dependency
 			// of our advice bean happens to trigger the singleton lock implicitly...
-			synchronized (this.adviceMonitor) {
+			synchronized (this.adviceMonitor) {//双重检查锁，第一步检查是在开头
 				advice = this.advice;
 				if (advice == null) {
 					advice = this.beanFactory.getBean(this.adviceBeanName, Advice.class);

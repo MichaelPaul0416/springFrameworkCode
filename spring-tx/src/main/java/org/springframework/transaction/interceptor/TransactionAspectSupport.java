@@ -280,9 +280,9 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 
 		// If the transaction attribute is null, the method is non-transactional.
 		TransactionAttributeSource tas = getTransactionAttributeSource();
-		final TransactionAttribute txAttr = (tas != null ? tas.getTransactionAttribute(method, targetClass) : null);
-		final PlatformTransactionManager tm = determineTransactionManager(txAttr);
-		final String joinpointIdentification = methodIdentification(method, targetClass, txAttr);
+		final TransactionAttribute txAttr = (tas != null ? tas.getTransactionAttribute(method, targetClass) : null);//返回事务的隔离级别以及spring中事务的传播级别
+		final PlatformTransactionManager tm = determineTransactionManager(txAttr);// choose TransactionManager --> 一般来说就是配置文件定义的TransactionManager
+		final String joinpointIdentification = methodIdentification(method, targetClass, txAttr);// Transactional注解修饰的方法的全限定名(注解标记在类上，这里也定位到方法上)
 
 		if (txAttr == null || !(tm instanceof CallbackPreferringPlatformTransactionManager)) {
 			// Standard transaction demarcation with getTransaction and commit/rollback calls.

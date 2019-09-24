@@ -12,4 +12,12 @@ dependencies {
 	optional("org.apache.derby:derbyclient:10.14.2.0")
 	optional("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
 	optional("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
+
+	// https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp
+	testCompile group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'
+
+	// https://mvnrepository.com/artifact/mysql/mysql-connector-java
+	testCompile group: 'mysql', name: 'mysql-connector-java', version: '5.1.47'
+
+
 }

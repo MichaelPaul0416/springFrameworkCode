@@ -1258,6 +1258,7 @@ public abstract class ClassUtils {
 			try {
 				if (Modifier.isPublic(method.getModifiers())) {
 					try {
+						// getMethod直接获取指定public方法
 						return targetClass.getMethod(method.getName(), method.getParameterTypes());
 					}
 					catch (NoSuchMethodException ex) {

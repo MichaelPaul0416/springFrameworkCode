@@ -39,9 +39,16 @@ import org.springframework.transaction.interceptor.TransactionAttribute;
 @SuppressWarnings("serial")
 public class SpringTransactionAnnotationParser implements TransactionAnnotationParser, Serializable {
 
+	/**
+	 *
+	 * @param element target method for open transaction
+	 * @return
+	 */
 	@Override
 	@Nullable
 	public TransactionAttribute parseTransactionAnnotation(AnnotatedElement element) {
+		// 寻找使用Transactional.class注解标记的element（一般来说是Method），然后将注解的属性也合并到这个对象中
+		// 其实AnnotationAttributes对象就是AnnotatedElement和对应的注解的属性的一个封装
 		AnnotationAttributes attributes = AnnotatedElementUtils.findMergedAnnotationAttributes(
 				element, Transactional.class, false, false);
 		if (attributes != null) {

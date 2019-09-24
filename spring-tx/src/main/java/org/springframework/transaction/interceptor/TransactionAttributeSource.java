@@ -37,6 +37,7 @@ public interface TransactionAttributeSource {
 	/**
 	 * Return the transaction attribute for the given method,
 	 * or {@code null} if the method is non-transactional.
+	 * 返回事务属性[spring事务的传播级别+数据库事务的隔离级别]，如果没有事务的话，那么就返回null
 	 * @param method the method to introspect
 	 * @param targetClass the target class (may be {@code null},
 	 * in which case the declaring class of the method must be used)
