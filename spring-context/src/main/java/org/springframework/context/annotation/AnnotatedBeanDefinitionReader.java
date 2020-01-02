@@ -213,7 +213,9 @@ public class AnnotatedBeanDefinitionReader {
 	<T> void doRegisterBean(Class<T> annotatedClass, @Nullable Supplier<T> instanceSupplier, @Nullable String name,
 			@Nullable Class<? extends Annotation>[] qualifiers, BeanDefinitionCustomizer... definitionCustomizers) {
 
+		// 只是简单设置了一下BeanDefinition的class属性，然后构建了StandardAnnotationMetadata
 		AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(annotatedClass);
+		// 当前bean的定义BeanDefinition，用元数据中的Condition过滤一下，如果符合的话，那就跳过，也就是当前bean不被注册
 		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {
 			return;
 		}

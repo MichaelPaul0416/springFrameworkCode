@@ -64,6 +64,7 @@ public @interface Conditional {//当所有的条件都满足时，这个Bean才�
 	/**
 	 * All {@link Condition Conditions} that must {@linkplain Condition#matches match}
 	 * in order for the component to be registered.
+	 * 一个注解通常可以组合多个Condition.class接口的实现类
 	 */
 	Class<? extends Condition>[] value();
 
