@@ -84,10 +84,12 @@ public class PropertySourcesPropertyResolver extends AbstractPropertyResolver {
 				}
 				Object value = propertySource.getProperty(key);
 				if (value != null) {
+					// 处理properties文件中key中包含的占位符
 					if (resolveNestedPlaceholders && value instanceof String) {
 						value = resolveNestedPlaceholders((String) value);
 					}
 					logKeyFound(key, propertySource, value);
+					// 对于properties中的值，进行对应的处理，返回需要要求的类型
 					return convertValueIfNecessary(value, targetValueType);
 				}
 			}

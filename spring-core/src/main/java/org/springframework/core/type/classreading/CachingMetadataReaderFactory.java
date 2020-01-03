@@ -121,11 +121,13 @@ public class CachingMetadataReaderFactory extends SimpleMetadataReaderFactory {
 			MetadataReader metadataReader = this.metadataReaderCache.get(resource);
 			if (metadataReader == null) {
 				metadataReader = super.getMetadataReader(resource);
+				//Map 是并发安全的数据类型，所以不需要上锁
 				this.metadataReaderCache.put(resource, metadataReader);
 			}
 			return metadataReader;
 		}
 		else if (this.metadataReaderCache != null) {
+			// 此时不是并发安全的数据类型，需要通过synchronized保护
 			synchronized (this.metadataReaderCache) {
 				MetadataReader metadataReader = this.metadataReaderCache.get(resource);
 				if (metadataReader == null) {

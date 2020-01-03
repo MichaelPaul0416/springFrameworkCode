@@ -536,6 +536,7 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	@Override
 	@Nullable
 	public String getProperty(String key) {
+		// 遍历注册的每一个PropertySources,从中获取同名key的value
 		return this.propertyResolver.getProperty(key);
 	}
 
