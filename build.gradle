@@ -1,7 +1,20 @@
 buildscript {
+//	repositories {
+//		maven { url "https://repo.spring.io/plugins-release" }
+//		maven { url "http://repo.springsource.org/plugins-release"}
+//	}
 	repositories {
-		maven { url "https://repo.spring.io/plugins-release" }
+		//阿里云仓库全家桶
+		maven{ url 'https://maven.aliyun.com/repository/central'}
+		maven{ url 'https://maven.aliyun.com/repository/public' }
+		maven{ url 'https://maven.aliyun.com/repository/google'}
+		maven{ url 'https://maven.aliyun.com/repository/gradle-plugin'}
+		maven{ url 'https://maven.aliyun.com/repository/spring'}
+		maven{ url 'https://maven.aliyun.com/repository/spring-plugin'}
+		maven{ url 'https://maven.aliyun.com/mvn/guide'}
+		maven{ url 'https://maven.aliyun.com/repository/apache-snapshots'}
 	}
+
 	dependencies {
 		classpath("io.spring.gradle:propdeps-plugin:0.0.9.RELEASE")
 		classpath("org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.16")
@@ -146,8 +159,19 @@ configure(allprojects) { project ->
 		configDir = rootProject.file("src/checkstyle")
 	}
 
+//	repositories {
+//		maven { url "https://repo.spring.io/libs-release" }
+//	}
 	repositories {
-		maven { url "https://repo.spring.io/libs-release" }
+		//阿里云仓库全家桶
+		maven{ url 'https://maven.aliyun.com/repository/central'}
+		maven{ url 'https://maven.aliyun.com/repository/public' }
+		maven{ url 'https://maven.aliyun.com/repository/google'}
+		maven{ url 'https://maven.aliyun.com/repository/gradle-plugin'}
+		maven{ url 'https://maven.aliyun.com/repository/spring'}
+		maven{ url 'https://maven.aliyun.com/repository/spring-plugin'}
+		maven{ url 'https://maven.aliyun.com/mvn/guide'}
+		maven{ url 'https://maven.aliyun.com/repository/apache-snapshots'}
 	}
 
 	dependencies {
