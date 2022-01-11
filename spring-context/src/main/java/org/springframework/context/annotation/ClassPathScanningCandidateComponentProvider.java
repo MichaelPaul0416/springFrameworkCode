@@ -418,11 +418,11 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 		try {
 			String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
 					resolveBasePackage(basePackage) + '/' + this.resourcePattern;
-			// 获取指定包下面的所有class，并且将其转换为Class对象
+			// 获取指定包下面的所有URL，并且将其转换为Resource对象,此处Resource只是URL对象的封装
 			Resource[] resources = getResourcePatternResolver().getResources(packageSearchPath);
 			boolean traceEnabled = logger.isTraceEnabled();
 			boolean debugEnabled = logger.isDebugEnabled();
-			for (Resource resource : resources) {//一个Resource代表一个class封装
+			for (Resource resource : resources) {//一个Resource可能是一个Jar，也可是一个类路径
 				if (traceEnabled) {
 					logger.trace("Scanning " + resource);
 				}
@@ -496,6 +496,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 			}
 		}
 		for (TypeFilter tf : this.includeFilters) {
+			// AnnotationTypeFilter:检查Bean是否拥有@Component注解或者使用这个注解修饰的注解
 			if (tf.match(metadataReader, getMetadataReaderFactory())) {
 				return isConditionMatch(metadataReader);//MetaDataReader描述的Bean的原信息是否足以作为bean被注册[如果没有被@Conditional修饰则返回true]
 			}

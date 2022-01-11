@@ -137,8 +137,11 @@ abstract class ConfigurationClassUtils {
 	 * @param metadata the metadata of the annotated class
 	 * @return {@code true} if the given class is to be registered as a
 	 * reflection-detected bean definition; {@code false} otherwise
+	 * 如果一个类被注解{@link Configuration}修饰，或者被{@link Component},{@link ComponentScan},
+	 * {@link Import},{@link ImportResource}修饰，或者有被{@link Bean}修饰的方法，那么这个类也算是一个Configuration
 	 */
 	public static boolean isConfigurationCandidate(AnnotationMetadata metadata) {
+		// 对应的Bean头上有@Configuration注解 ||
 		return (isFullConfigurationCandidate(metadata) || isLiteConfigurationCandidate(metadata));
 	}
 
@@ -160,6 +163,7 @@ abstract class ConfigurationClassUtils {
 	 * @param metadata the metadata of the annotated class
 	 * @return {@code true} if the given class is to be processed as a lite
 	 * configuration class, just registering it and scanning it for {@code @Bean} methods
+	 * 解释当前的类是否能被认作为一个Configuration，是的话需要进一步解析这个类，找到其中的Bean
 	 */
 	public static boolean isLiteConfigurationCandidate(AnnotationMetadata metadata) {
 		// Do not consider an interface or an annotation...

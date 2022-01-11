@@ -106,6 +106,10 @@ class ConditionEvaluator {
 			if (condition instanceof ConfigurationCondition) {
 				requiredPhase = ((ConfigurationCondition) condition).getConfigurationPhase();
 			}
+
+			/**
+			 * {@link Conditional#value()}指定的{@link Condition}实现类需要都符合，bean才能避免不需要被skip的命运
+			 */
 			if ((requiredPhase == null || requiredPhase == phase) && !condition.matches(this.context, metadata)) {
 				return true;
 			}

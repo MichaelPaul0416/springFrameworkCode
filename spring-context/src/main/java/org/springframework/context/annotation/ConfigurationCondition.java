@@ -54,6 +54,7 @@ public interface ConfigurationCondition extends Condition {
 		 * {@code @Configuration} classes from being added.
 		 * <p>At the time that the condition is evaluated, all {@code @Configuration}s
 		 * will have been parsed.
+		 * 应该被注册为Bean
 		 */
 		REGISTER_BEAN
 	}
