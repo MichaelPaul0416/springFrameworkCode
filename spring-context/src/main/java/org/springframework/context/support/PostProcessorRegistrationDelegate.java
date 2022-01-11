@@ -52,6 +52,15 @@ final class PostProcessorRegistrationDelegate {
 	}
 
 
+	/**
+	 * 从{@link org.springframework.beans.factory.BeanFactory}中获取对应的{@link BeanFactoryPostProcessor},
+	 * 由于{@link BeanDefinitionRegistryPostProcessor}是{@link BeanFactoryPostProcessor},
+	 * 这里处理时优先处理{@link BeanDefinitionRegistryPostProcessor},再处理{@link BeanFactoryPostProcessor},
+	 * 同时由于{@link PriorityOrdered}和{@link Ordered}的存在,
+	 * 所以在处理两类{@code PostProcessor}时，优先级从高到低为{@link PriorityOrdered}{@link >}{@link Ordered}{@code >}没有注解修饰的各自接口
+	 * @param beanFactory
+	 * @param beanFactoryPostProcessors
+	 */
 	public static void invokeBeanFactoryPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
@@ -127,6 +136,10 @@ final class PostProcessorRegistrationDelegate {
 			}
 
 			// Now, invoke the postProcessBeanFactory callback of all processors handled so far.下面分别对BeanFactoryPostProcessor#postProcessBeanFactory
+			/**
+			 * 先执行{@link BeanDefinitionRegistryPostProcessor}
+			 * 再执行{@link BeanFactoryPostProcessor}
+			 */
 			invokeBeanFactoryPostProcessors(registryProcessors, beanFactory);//bean which implement BeanDefinitionRegistryPostProcessor,PriorityOrdered,Ordered
 			invokeBeanFactoryPostProcessors(regularPostProcessors, beanFactory);//bean which implement BeanFactoryPostProcessor but not implement BeanDefinitionRegistryPostProcessor
 		}
@@ -185,6 +198,14 @@ final class PostProcessorRegistrationDelegate {
 		beanFactory.clearMetadataCache();
 	}
 
+	/**
+	 * 先注册使用{@link PriorityOrdered}修饰的{@link BeanPostProcessor}
+	 * 再是{@link Ordered}修饰的{@link BeanPostProcessor},
+	 * 然后是普通的{@link BeanPostProcessor}
+	 * 最后是上述bean中实现了{@link MergedBeanDefinitionPostProcessor}的bean
+	 * @param beanFactory
+	 * @param applicationContext
+	 */
 	public static void registerBeanPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, AbstractApplicationContext applicationContext) {
 

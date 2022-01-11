@@ -487,6 +487,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Return the list of BeanFactoryPostProcessors that will get applied
 	 * to the internal BeanFactory.
+	 * 这里返回的{@link BeanFactoryPostProcessor}需要手动调用{@link AbstractApplicationContext#addBeanFactoryPostProcessor(BeanFactoryPostProcessor)}
+	 * 注册进去，给用户开放接口
 	 */
 	public List<BeanFactoryPostProcessor> getBeanFactoryPostProcessors() {
 		return this.beanFactoryPostProcessors;
