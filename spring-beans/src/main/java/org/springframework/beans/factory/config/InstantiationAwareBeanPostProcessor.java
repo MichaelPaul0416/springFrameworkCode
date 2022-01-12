@@ -31,6 +31,7 @@ import org.springframework.lang.Nullable;
  * for example to create proxies with special TargetSources (pooling targets,
  * lazily initializing targets, etc), or to implement additional injection strategies
  * such as field injection.
+ * 创建从池中创建代理类或者属性注入使用
  *
  * <p><b>NOTE:</b> This interface is a special purpose interface, mainly for
  * internal use within the framework. It is recommended to implement the plain
@@ -67,6 +68,8 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @see #postProcessAfterInstantiation
 	 * @see org.springframework.beans.factory.support.AbstractBeanDefinition#hasBeanClass
+	 * 可以在此返回代理类，表示这个beanDefinition后续不会再走常规的初始化
+	 * 同时{@link SmartInstantiationAwareBeanPostProcessor}中推导beanType时的bean，也是基于此返回
 	 */
 	@Nullable
 	default Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
@@ -87,6 +90,9 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * instances being invoked on this bean instance.
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @see #postProcessBeforeInstantiation
+	 * bean实例化之后，但是没有被spring进行输入注入之前
+	 * 如果需要设置bean的属性值或者没其他特殊情况，需要返回true
+	 * 属性设置需要被跳过返回false
 	 */
 	default boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
 		return true;
@@ -109,6 +115,8 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @since 5.1
 	 * @see #postProcessPropertyValues
+	 * 返回需要给bean设置的属性名和属性值，这里可以定制部分属性的值
+	 * 如果使用已有的，不想改的话，直接返回null
 	 */
 	@Nullable
 	default PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName)
