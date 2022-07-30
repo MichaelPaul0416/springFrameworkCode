@@ -14,5 +14,7 @@ public class ConditionalExample {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("com.wq");
         Framework framework = context.getBean("framework", Framework.class);
         System.out.println(framework.wrapper("netty"));
+        System.out.println("----------------------------------------");
+        System.out.println(context.containsBean("commonBean"));
     }
 }
